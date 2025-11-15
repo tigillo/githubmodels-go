@@ -1,0 +1,40 @@
+name: Release
+
+# Trigger workflow only on semantic version tags
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v3
+
+      # Step 2: Setup Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      # Step 3: Run tests before releasing
+      - name: Run tests
+        run: go test ./...
+
+      # Step 4: Optionally build binaries (for libraries, this may be skipped)
+      - name: Build
+        run: go build ./...
+
+      # Step 5: Create a GitHub release
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
