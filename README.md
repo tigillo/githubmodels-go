@@ -57,7 +57,7 @@ func main() {
 ### Create Chat Completion
 ```
 resp, err := client.ChatCompletion(ctx, githubmodels.ChatRequest{
-    Model: "github/code-chat",
+    Model: "openai/gpt-4.1",
     Messages: []githubmodels.Message{
         {Role: "user", Content: "Write a Go function to reverse a string"},
     },
